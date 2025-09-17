@@ -1,9 +1,9 @@
-# Base image with JDK 21
+# Use JDK 21
 FROM eclipse-temurin:21-jdk-alpine
 
 WORKDIR /app
 
-# Copy Gradle wrapper and build scripts
+# Copy Gradle wrapper and scripts
 COPY gradlew .
 COPY gradle/ gradle/
 COPY build.gradle .
@@ -15,13 +15,14 @@ COPY src/ src/
 # Make Gradle wrapper executable
 RUN chmod +x gradlew
 
-# Build project inside container, skipping tests
+# Build the jar inside container, skipping tests
 RUN ./gradlew build -x test
-RUN ls -l build/libs/
 
-# Copy any jar produced in build/libs/ to app.jar
-RUN cp build/libs/*.jar app.jar
+# Copy the jar to a standard name
+RUN cp build/libs/portfolioBackend-0.0.1-SNAPSHOT.jar app.jar
 
+# Expose Spring Boot default port
 EXPOSE 8080
 
+# Start the app
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
