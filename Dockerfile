@@ -17,6 +17,7 @@ RUN chmod +x gradlew
 
 # Build project inside container, skipping tests
 RUN ./gradlew build -x test
+RUN ls -l build/libs/
 
 # Copy any jar produced in build/libs/ to app.jar
 RUN cp build/libs/*.jar app.jar
